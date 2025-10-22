@@ -53,7 +53,7 @@ const EducationForm = ({ data, onChange }) => {
                                     </button>
                                 </div>
                                 <div className='grid md:grid-cols-2 gap-3'>
-                                    <input value={education.instituion || ""} onChange={(e)=>updateEducation(index, "institution", e.target.value)}
+                                    <input value={education.institution || ""} onChange={(e)=>updateEducation(index, "institution", e.target.value)}
                                     type="text" placeholder='Institution Name' className='px-3 py-2 text-sm'/>
     
                                     <input value={education.degree || ""} onChange={(e)=>updateEducation(index, "degree", e.target.value)}

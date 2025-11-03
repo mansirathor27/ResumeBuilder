@@ -1,15 +1,51 @@
 import { Mail, Phone, MapPin, Linkedin, Globe } from "lucide-react";
 
 const ClassicTemplate = ({ data, accentColor }) => {
-    const formatDate = (dateStr) => {
+    // const formatDate = (dateStr) => {
+    //     if (!dateStr) return "";
+    //     const [year, month] = dateStr.split("-");
+    //     return new Date(year, month - 1).toLocaleDateString("en-US", {
+    //         year: "numeric",
+    //         month: "short"
+    //     });
+    // };
+     const formatDate = (dateStr) => {
         if (!dateStr) return "";
-        const [year, month] = dateStr.split("-");
-        return new Date(year, month - 1).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short"
-        });
+        
+        console.log('📅 Formatting date:', dateStr); // Debug log
+        
+        // If it's already in display format like "Mar'24", just return it
+        if (typeof dateStr === 'string' && /^[A-Za-z]{3}'?\d{2}$/.test(dateStr)) {
+            return dateStr.replace("'", "'"); // Ensure consistent formatting
+        }
+        
+        // If it's in ISO format (YYYY-MM or YYYY-MM-DD)
+        if (typeof dateStr === 'string' && dateStr.includes('-')) {
+            try {
+                const parts = dateStr.split('-');
+                const year = parts[0];
+                const month = parseInt(parts[1]) - 1; // Months are 0-indexed in JS
+                
+                const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                
+                if (month >= 0 && month < 12) {
+                    const shortYear = year.slice(-2); // Get last 2 digits of year
+                    return `${monthNames[month]}'${shortYear}`;
+                }
+            } catch (error) {
+                console.warn('Date parsing error:', error);
+            }
+        }
+        
+        // If it's just a year (YYYY)
+        if (/^\d{4}$/.test(dateStr)) {
+            return dateStr;
+        }
+        
+        // Return original if we can't parse it
+        return dateStr;
     };
-
     return (
         <div className="max-w-4xl mx-auto p-8 bg-white text-gray-800 leading-relaxed">
             {/* Header */}

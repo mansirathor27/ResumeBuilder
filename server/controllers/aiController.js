@@ -3,7 +3,7 @@ import Resume from "../models/Resume.js";
 import ai from "../configs/ai.js";
 import OpenAI from "openai";
 
-export const enhanceProfessionalSummary = async() =>{
+export const enhanceProfessionalSummary = async(req,res) =>{
     try{
         const { userContent } = req.body;
         if(!userContent){
@@ -30,7 +30,7 @@ export const enhanceProfessionalSummary = async() =>{
 
 
 
-export const enhanceJobDescription = async() =>{
+export const enhanceJobDescription = async(req, res) =>{
     try{
         const { userContent } = req.body;
         if(!userContent){
@@ -76,7 +76,7 @@ export const uploadResume = async (req, res) => {
      {
         professional_summary: {type: String , default: ''},
         skills: [{ type: String }],
-        professional_info: {
+        personal_info: {
             image: {type: String, default: ''},
             full_name: {type: String, default: ''},
             profession: {type: String, default: ''},

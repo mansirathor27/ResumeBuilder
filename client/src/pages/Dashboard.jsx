@@ -44,28 +44,48 @@ const Dashboard = () => {
   }
   
 
- const uploadResume = async (event) => {
+const uploadResume = async (event) => {
   event.preventDefault();
   setIsLoading(true);
 
   try {
-    const resumeText = await pdfToText(resume)
+    // Check if a file is selected
+    if (!resume) {
+      toast.error("Please select a resume file to upload.");
+      setIsLoading(false);
+      return;
+    }
 
-    const { data } = await api.post("/api/ai/upload-resume", {title, resumeText}, {
-      headers: {
-        Authorization: token }});
+    // Extract text from the PDF
+    const resumeText = await pdfToText(resume);
 
+    // Check if extracted text is empty
+    if (!resumeText.trim()) {
+      toast.error("Could not extract text from the PDF. Make sure it's not empty or scanned.");
+      setIsLoading(false);
+      return;
+    }
+
+    // Send request to backend
+    const { data } = await api.post(
+      "/api/ai/upload-resume",
+      { title, resumeText },
+      { headers: { Authorization: token } }
+    );
+
+    // Reset form and state
     setTitle("");
     setResume(null);
     setShowUploadResume(false);
-    navigate(`/app/builder/${data.resumeId}`)
+    navigate(`/app/builder/${data.resumeId}`);
     toast.success("Resume uploaded successfully!");
   } catch (error) {
     console.error(error);
-    toast.error(error?.response?.data?.message || error.message)
-  } 
-  setIsLoading(false)
-}
+    toast.error(error?.response?.data?.message || error.message);
+  }
+
+  setIsLoading(false);
+};
 
 
 
